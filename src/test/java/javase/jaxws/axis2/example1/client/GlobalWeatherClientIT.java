@@ -10,7 +10,7 @@ import org.junit.Test;
 
 import us.codecraft.xsoup.Xsoup;
 
-public class GlobalWeatherClientTest {
+public class GlobalWeatherClientIT {
 
 	@Test
     public void test1() throws RemoteException {

@@ -1,21 +1,24 @@
 <project 
-		xmlns="http://maven.apache.org/POM/4.0.0" 
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+        xmlns="http://maven.apache.org/POM/4.0.0" 
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     
     <!-- 
     
-    	Environment:
-    	1.	Windows 7 64 bit (assume OS installed in C:\Windows)
-    	2. 	Eclipse 4.4
-    	3. 	JDK 8.0   
+        Environment:
+        1.  Windows 7 64 bit (assume OS installed in C:\Windows)
+        2.  Eclipse 4.4
+        3.  JDK 8.0   
        
-       	Approach1 - all automate
-        1.	"mvn test" This will include 
-         		a) generate java stub from server
-         		b) run unit test 
-       
-			             
+        Approach1 - all automate
+        1.  "mvn install". This will include 
+                a) generate java stub
+                b) run integration test
+        2.  this project includes integration test 
+        3.  with maven-failsafe-plugin, any java file name with "IT" will be treated as 
+            intergration test (by maven, the phase is integration-test). 
+        4)  the integration test report can be found in \target\failsafe-reports
+              
     -->
         
     <properties>
@@ -65,10 +68,10 @@
         </pluginManagement>
     
         <plugins>   
-        	
-        	<!-- initialize -->
+            
+            <!-- initialize -->
    
-			            
+                        
             <!-- compile -->                  
             <plugin>                                   
                 <groupId>org.apache.maven.plugins</groupId>
@@ -88,21 +91,35 @@
                 <version>1.6.2</version>                
                 <executions>
                     <execution>
-                    	<id>javase.jaxws.axis.example1.stub | generate-sources</id>
+                        <id>javase.jaxws.axis.example1.stub | generate-sources</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>wsdl2code</goal>
                         </goals>
                         <configuration>                    
-		                    <wsdlFile>http://www.webservicex.net/globalweather.asmx?WSDL</wsdlFile>
-		                    <databindingName>adb</databindingName>
-		                    <packageName>javase.jaxws.axis2.example1.stub</packageName>
-		                    <outputDirectory>${basedir}/src/main/java</outputDirectory>		                    
-		                    <flattenFiles>true</flattenFiles>  
-                		</configuration>
+                            <wsdlFile>http://www.webservicex.net/globalweather.asmx?WSDL</wsdlFile>
+                            <databindingName>adb</databindingName>
+                            <packageName>javase.jaxws.axis2.example1.stub</packageName>
+                            <outputDirectory>${basedir}/src/main/java</outputDirectory>                         
+                            <flattenFiles>true</flattenFiles>  
+                        </configuration>
                     </execution>
                 </executions>                
             </plugin> 
+            
+            <!-- integration-test -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.12</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
                    
         </plugins>    
     </build>     
@@ -112,7 +129,7 @@
     <dependencies>
            
         <!-- junit -->                
-		<dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.10</version>
@@ -120,26 +137,26 @@
             <scope>compile</scope>
         </dependency>
         
-        <!-- axis2-wsdl2code-maven-plugin -->    		
-       	<dependency>
-           	<groupId>org.apache.axis2</groupId>
-           	<artifactId>axis2</artifactId>
-           	<version>1.6.2</version>
-       	</dependency>
+        <!-- axis2-wsdl2code-maven-plugin -->           
+        <dependency>
+            <groupId>org.apache.axis2</groupId>
+            <artifactId>axis2</artifactId>
+            <version>1.6.2</version>
+        </dependency>
 
-		<dependency>
-           	<groupId>org.apache.ws.commons.axiom</groupId>
-           	<artifactId>axiom-api</artifactId>
-           	<version>1.2.14</version>
-       	</dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.axiom</groupId>
+            <artifactId>axiom-api</artifactId>
+            <version>1.2.14</version>
+        </dependency>
             
           
         <!-- javase.jaxws.axis2.example1.client.GlobalWeatherClient -->     
-		<dependency>
-			<groupId>org.apache.ws.commons.schema</groupId>
-			<artifactId>XmlSchema</artifactId>
-			<version>1.4.7</version>
-      	</dependency>
+        <dependency>
+            <groupId>org.apache.ws.commons.schema</groupId>
+            <artifactId>XmlSchema</artifactId>
+            <version>1.4.7</version>
+        </dependency>
         
         <dependency>
             <groupId>wsdl4j</groupId>
@@ -181,11 +198,11 @@
         
         
         <!-- xsoup, complement jsoup for xpath -->  
-		<dependency>
-			<groupId>us.codecraft</groupId>
-			<artifactId>xsoup</artifactId>
-			<version>0.3.0</version>
-		</dependency>
+        <dependency>
+            <groupId>us.codecraft</groupId>
+            <artifactId>xsoup</artifactId>
+            <version>0.3.0</version>
+        </dependency>
 
         
     </dependencies>             
